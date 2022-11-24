@@ -37,6 +37,7 @@ export class CategoryService {
     return this.http.get<Category>(`${API_URL}/categories/${id}`);
   }
 
+
   updateCategory(id: number, category: Category): Observable<Category> {
     return this.http.put<Category>(`${API_URL}/categories/${id}`, category);
   }
