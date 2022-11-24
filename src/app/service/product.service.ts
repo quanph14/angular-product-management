@@ -1,5 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Product} from '../model/product';
+import {environment} from "../../enviroments/enviroment";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+
+const API_URL = `${environment.apiUrl}`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,12 +36,28 @@ export class ProductService {
     price: 1895000,
     description: 'Like new'
   }];
-  constructor() { }
-  getAll() {
-    return this.products;
+
+  constructor(private http: HttpClient) {
   }
 
-  saveProduct(product: any) {
-    this.products.push(product);
+  getAll(): Observable<Product[]> {
+    return this.http.get<Product[]>(API_URL + 'products');
+  }
+
+  // @ts-ignore
+  saveProduct(product): Observable<Product> {
+    return this.http.post<Product>(API_URL + '/products', product);
+  }
+
+  findById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${API_URL}/products/${id}`)
+  }
+
+  updateProduct(id: number, product: Product): Observable<Product> {
+    return this.http.put<Product>(`${API_URL}/products/${id}`, product)
+  }
+
+  deleteProduct(id: number): Observable<Product> {
+    return this.http.delete<Product>(`${API_URL}/products/${id}`)
   }
 }
